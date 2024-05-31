@@ -1,0 +1,34 @@
+name: "Publish opentracing images to GHCR"
+
+on:
+  push:
+    branches:
+      - master
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  copy-opentracing:
+    name: Publish opentracing images to GHCR
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Copy image tag
+        run: |
+          skopeo copy -a docker://ghcr.io/pdabelf5/nginx-opentracing:nginx-1.27.0 docker://ghcr.io/nginxinc/k8s-common:nginx-opentracing-1.27.0
+          skopeo copy -a docker://ghcr.io/pdabelf5/nginx-opentracing:nginx-1.27.0-alpine docker://ghcr.io/nginxinc/k8s-common:nginx-opentracing-1.27.0-alpine
