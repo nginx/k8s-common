@@ -1,0 +1,7 @@
+# Plus agent repo for debian 12 (bookworm).
+
+Types: deb
+URIs: https://pkgs.nginx.com/nginx-agentv3/debian
+Suites: bookworm
+Components: agent
+Signed-By: /usr/share/keyrings/nginx-archive-keyring.gpg
