@@ -64,7 +64,7 @@ build {
   provisioner "shell" {
     inline = [
       "echo 'alias k='kubectl'' >> .bashrc",
-      "git clone https://github.com/nginxinc/nginx-gateway-fabric.git",
+      "git clone https://github.com/nginx/nginx-gateway-fabric.git",
       "cd nginx-gateway-fabric/tests",
       "go mod download",
       "cp /tmp/license.jwt ../license.jwt",

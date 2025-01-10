@@ -28,10 +28,10 @@ jobs:
           repository: |
             nginxinc/kic-test-containers
             nginxinc/nginx-ingress-helm-operator
-            nginxinc/nginx-prometheus-exporter
-            nginxinc/nginx-plus-go-client
-            nginxinc/nginx-asg-sync
-            nginxinc/telemetry-exporter
+            nginx/nginx-prometheus-exporter
+            nginx/nginx-plus-go-client
+            nginx/nginx-asg-sync
+            nginx/telemetry-exporter
           token: ${{ secrets.NGINX_PAT }}
           prune: true
 
@@ -42,7 +42,7 @@ jobs:
     steps:
       - run: |
           gh repo sync nginx-bot/certified-operators
-          gh repo sync nginxinc/winget-pkgs
+          gh repo sync nginx/winget-pkgs
           gh repo sync nginxinc/kubernetes-json-schema
         env:
           GITHUB_TOKEN: ${{ secrets.NGINX_PAT }}
