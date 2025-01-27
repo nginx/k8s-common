@@ -33,36 +33,41 @@ build {
 
   provisioner "shell" {
     inline = [
-    "curl -L https://nixos.org/nix/install -o install-nix.sh",
-    "chmod +x install-nix.sh",
-    "bash install-nix.sh --daemon",
-    "rm install-nix.sh",
-    "sed -i '1i. /etc/bashrc' ~/.bashrc"
+      "curl -L https://nixos.org/nix/install -o install-nix.sh",
+      "chmod +x install-nix.sh",
+      "bash install-nix.sh --daemon",
+      "rm install-nix.sh",
+      "sed -i '1i. /etc/bashrc' ~/.bashrc"
     ]
   }
 
   provisioner "file" {
     source      = "packages.nix"
     destination = "/tmp/packages.nix"
+  }
 
-
+  provisioner "file" {
+    source      = "license.jwt"
+    destination = "/tmp/license.jwt"
   }
 
   provisioner "shell" {
     inline = [
-    "nix-env -if /tmp/packages.nix",
-    "sudo apt-get update",
-    "sudo apt-get install -y --no-install-recommends --no-install-suggests google-cloud-sdk-gke-gcloud-auth-plugin locales",
-    "echo 'en_US.UTF-8 UTF-8' | sudo tee /etc/locale.gen",
-    "sudo locale-gen",
+      "nix-env -if /tmp/packages.nix",
+      "sudo apt-get update",
+      "sudo apt-get install -y --no-install-recommends --no-install-suggests google-cloud-sdk-gke-gcloud-auth-plugin locales cloud-init",
+      "echo 'en_US.UTF-8 UTF-8' | sudo tee /etc/locale.gen",
+      "sudo locale-gen",
     ]
   }
 
   provisioner "shell" {
     inline = [
-      "git clone https://github.com/nginxinc/nginx-gateway-fabric.git",
+      "echo 'alias k='kubectl'' >> .bashrc",
+      "git clone https://github.com/nginx/nginx-gateway-fabric.git",
       "cd nginx-gateway-fabric/tests",
       "go mod download",
+      "cp /tmp/license.jwt ../license.jwt",
     ]
   }
 
