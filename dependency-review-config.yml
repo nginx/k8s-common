@@ -10,6 +10,7 @@ allow_licenses:
   - OpenSSL
   - Python-2.0
   - X11
+  - CC0-1.0 AND MIT
 allow-dependencies-licenses:
   - 'pkg:githubactions/fossas/fossa-action'
   - 'pkg:githubactions/opentofu/setup-opentofu'
