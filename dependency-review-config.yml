@@ -10,7 +10,7 @@ allow_licenses:
   - OpenSSL
   - Python-2.0
   - X11
-  - CC0-1.0 AND MIT
+  - CC0-1.0
   - CC-BY-4.0
 allow-dependencies-licenses:
   - 'pkg:githubactions/fossas/fossa-action'
