@@ -6,11 +6,12 @@
   "configMigration": true,
   "customDatasources": {
     "nginx-plus": {
-      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/lucacome/renovate-datasource/main/nginx-plus/releases.json",
+      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/nginx/k8s-common/renovate-updates/files/nginx-plus-releases.json",
       "format": "json"
     }
   },
   "extends": [
+    "schedule:daily",
     "config:recommended",
     "docker:enableMajor",
     "helpers:pinGitHubActionDigests",
@@ -85,7 +86,7 @@
         "github_actions"
       ],
       "matchManagers": [
-        "action"
+        "github-actions"
       ]
     }
   ],
@@ -99,11 +100,12 @@
     "enabled": true
   },
   "rebaseWhen": "behind-base-branch",
-  "regexManagers": [
-    {
+  "customManagers": [
+      {
+      "customType": "regex",
       "datasourceTemplate": "github-tags",
       "description": "Update Github Action references in the Markdown files",
-      "fileMatch": [
+      "managerFilePatterns": [
         "\\.md$"
       ],
       "matchStrings": [
@@ -113,18 +115,20 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update _VERSION variables in shell scripts and Makefiles",
-      "fileMatch": [
-        "\\.sh$",
-        "(^|/)Makefile$"
+      "managerFilePatterns": [
+        "/\\.sh$/",
+        "/Makefile$/"
       ],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>[a-z-]+?))?\\s[[:word:]]+?_VERSION = (?<currentValue>.+?)\\s"
+        "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)?(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>[a-z-]+?))?\\s+\\w+?_VERSION\\s*\\??=\\s*(?<currentValue>.+?)\\s"
       ]
     },
     {
+      "customType": "regex",
       "description": "Update _VERSION variables in Dockerfiles",
-      "fileMatch": [
+      "managerFilePatterns": [
         "(^|/|\\.)Dockerfile$",
         "(^|/)Dockerfile\\.[^/]*$"
       ],
@@ -133,17 +137,20 @@
       ]
     },
     {
+      "customType": "regex",
       "description": "Update `version:` and `_VERSION:` variables in github workflows",
-      "fileMatch": [
-        "^\\.github/workflows/[^/]+\\.ya?ml$"
+      "managerFilePatterns": [
+        "^\\.github\\/workflows\\/\\w+\\.ya?ml$"
       ],
       "matchStrings": [
-        "\\s+(?:[[:word:]]-)?version: (?<currentValue>.+?) # renovate: datasource=(?<datasource>.+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>.+?))?\\s",
+        "\\s+.+?: (?<currentValue>.+?) # renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>[a-z-]+?))?\\s",
         "\\s*[[:word:]]+?_VERSION=(?<currentValue>.+?) # renovate: datasource=(?<datasource>.+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>.+?))?\\s"
       ]
     },
     {
-      "fileMatch": [
+      "customType": "regex",
+      "description": "Update `Version:` in go files",
+      "managerFilePatterns": [
         "\\.go$"
       ],
       "matchStrings": [
@@ -152,9 +159,11 @@
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
     },
     {
+      "customType": "regex",
+      "description": "Update Packer and Packer Plugin versions in Packer files",
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "{{#if depName}}{{#if (containsString depName \"hashicorp/\")}}{{{replace \"hashicorp/\" \"hashicorp/packer-plugin-\" depName}}}{{else}}{{{depName}}}{{/if}}{{else}}hashicorp/packer{{/if}}",
-      "fileMatch": [
+      "managerFilePatterns": [
         "\\.pkr\\.hcl"
       ],
       "matchStrings": [
