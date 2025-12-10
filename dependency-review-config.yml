@@ -12,6 +12,7 @@ allow_licenses:
   - X11
   - CC0-1.0
   - CC-BY-4.0
+  - LicenseRef-scancode-google-patent-license-golang
 allow-dependencies-licenses:
   - 'pkg:githubactions/fossas/fossa-action'
   - 'pkg:githubactions/opentofu/setup-opentofu'
