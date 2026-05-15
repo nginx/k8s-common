@@ -1,0 +1,7 @@
+# Plus agent repo for debian 13 (trixie).
+
+Types: deb
+URIs: https://pkgs.nginx.com/nginx-agent/debian
+Suites: trixie
+Components: agent
+Signed-By: /usr/share/keyrings/nginx-archive-keyring.gpg
