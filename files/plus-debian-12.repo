@@ -1,5 +1,5 @@
 # Plus repo for debian 12 (bookworm).
-# The VERSION variable needs to be replaced with the version of NGINX Plus you want to install, i.e. R30, or removed.
+# The VERSION variable needs to be replaced with the version of NGINX Plus you want to install, i.e. R37.0, or removed.
 
 Types: deb
 URIs: https://pkgs.nginx.com/plus/%VERSION%/debian

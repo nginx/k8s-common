@@ -1,5 +1,5 @@
 # NAP DoS repo for debian 13 (trixie).
-# The VERSION variable needs to be replaced with the version of NGINX Plus you want to install, i.e. R30, or removed.
+# The VERSION variable needs to be replaced with the version of NGINX Plus you want to install, i.e. R37.0, or removed.
 
 Types: deb
 URIs: https://pkgs.nginx.com/app-protect-dos/%VERSION%/debian
