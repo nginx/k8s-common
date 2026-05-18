@@ -1,0 +1,15 @@
+# NAP WAF repos for debian 13 (trixie).
+# The VERSION variable needs to be replaced with the version of NGINX Plus you want to install, i.e. R37.0, or removed.
+
+Types: deb
+URIs: https://pkgs.nginx.com/app-protect/%VERSION%/debian
+Suites: trixie
+Components: nginx-plus
+Signed-By: /usr/share/keyrings/nginx-archive-keyring.gpg
+
+# security updates
+Types: deb
+URIs: https://pkgs.nginx.com/app-protect-security-updates/debian
+Suites: trixie
+Components: nginx-plus
+Signed-By: /usr/share/keyrings/app-protect-archive-keyring.gpg

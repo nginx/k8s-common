@@ -1,8 +1,8 @@
-# Plus repo for debian 12 (bookworm).
+# Plus repo for debian 13 (trixie).
 # The VERSION variable needs to be replaced with the version of NGINX Plus you want to install, i.e. R37.0, or removed.
 
 Types: deb
 URIs: https://pkgs.nginx.com/plus/%VERSION%/debian
-Suites: bookworm
+Suites: trixie
 Components: nginx-plus
 Signed-By: /usr/share/keyrings/nginx-archive-keyring.gpg

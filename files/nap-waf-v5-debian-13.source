@@ -1,0 +1,8 @@
+# NAP WAF repos for debian 13 (trixie).
+# Full path to packages: https://pkgs.nginx.com/app-protect-x-plus/debian/pool/nginx-plus/a/app-protect-module-plus/
+
+Types: deb
+URIs: https://pkgs.nginx.com/app-protect-x-plus/debian
+Suites: trixie
+Components: nginx-plus
+Signed-By: /usr/share/keyrings/nginx-archive-keyring.gpg
