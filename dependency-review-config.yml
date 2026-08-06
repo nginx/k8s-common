@@ -19,4 +19,5 @@ allow-dependencies-licenses:
   - 'pkg:githubactions/opentofu/setup-opentofu'
   - 'pkg:golang/github.com/shoenig/go-m1cpu'
   - 'pkg:pypi/pytest-metadata'
+  - 'pkg:golang/github.com/hashicorp/go-version'
 comment-summary-in-pr: on-failure
