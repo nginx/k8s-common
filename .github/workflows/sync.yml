@@ -17,32 +17,98 @@ jobs:
   labels-sync:
     runs-on: ubuntu-24.04
     if: ${{ github.event.repository.fork == false }}
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Fetch App creds from vault
+        uses: nginx/ci-self-hosted/.github/actions/get-from-vault@5c3e1f8b51f66a851fdba80f70e19cf966199730 # main @ 2026-05-22
+        with:
+          client-id: ${{ secrets.AZURE_COMMON_VAULT_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_COMMON_VAULT_TENANT_ID }}
+          vault-name: ${{ secrets.COMMON_KEYVAULT_NAME }}
+          secret-names: nginx-bot-nic-sync-jobs-app-client-id,nginx-bot-nic-sync-jobs-app-private-key
+          env-names: APP_ID,APP_PRIVATE_KEY
+
+      - name: Mint token for nginx org
+        id: nginx-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ env.APP_PRIVATE_KEY }}
+          owner: nginx
+          repositories: nginx-prometheus-exporter,nginx-plus-go-client,nginx-asg-sync,telemetry-exporter,kic-test-containers,nginx-ingress-helm-operator
 
       - name: Sync Labels
         uses: micnncim/action-label-syncer@3abd5ab72fda571e69fffd97bd4e0033dd5f495c # v1.3.0
         with:
           manifest: labels.yml
           repository: |
-            nginxinc/kic-test-containers
-            nginxinc/nginx-ingress-helm-operator
+            nginx/kic-test-containers
+            nginx/nginx-ingress-helm-operator
             nginx/nginx-prometheus-exporter
             nginx/nginx-plus-go-client
             nginx/nginx-asg-sync
             nginx/telemetry-exporter
-          token: ${{ secrets.NGINX_PAT }}
+          token: ${{ steps.nginx-token.outputs.token }}
           prune: true
 
   sync-repos:
     runs-on: ubuntu-24.04
     permissions:
-      contents: write
+      id-token: write
+      contents: read
     steps:
-      - run: |
-          gh repo sync nginx-bot/certified-operators
-          gh repo sync nginx/winget-pkgs
-          gh repo sync nginxinc/kubernetes-json-schema
+      - name: Fetch App creds from vault
+        uses: nginx/ci-self-hosted/.github/actions/get-from-vault@5c3e1f8b51f66a851fdba80f70e19cf966199730 # main @ 2026-05-22
+        with:
+          client-id: ${{ secrets.AZURE_COMMON_VAULT_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_COMMON_VAULT_TENANT_ID }}
+          vault-name: ${{ secrets.COMMON_KEYVAULT_NAME }}
+          secret-names: nginx-bot-nic-sync-jobs-app-client-id,nginx-bot-nic-sync-jobs-app-private-key
+          env-names: APP_ID,APP_PRIVATE_KEY
+
+      - name: Mint token for nginx org
+        id: nginx-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ env.APP_PRIVATE_KEY }}
+          owner: nginx
+          repositories: winget-pkgs
+
+      - name: Mint token for nginxinc org
+        id: nginxinc-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ env.APP_PRIVATE_KEY }}
+          owner: nginxinc
+          repositories: kubernetes-json-schema
+
+      - name: Mint token for nginx-bot org
+        id: bot-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ env.APP_PRIVATE_KEY }}
+          owner: nginx-bot
+          repositories: certified-operators
+
+      - name: Sync nginx-bot/certified-operators
+        run: gh repo sync nginx-bot/certified-operators
         env:
-          GITHUB_TOKEN: ${{ secrets.NGINX_PAT }}
+          GH_TOKEN: ${{ steps.bot-token.outputs.token }}
+
+      - name: Sync nginx/winget-pkgs
+        run: gh repo sync nginx/winget-pkgs
+        env:
+          GH_TOKEN: ${{ steps.nginx-token.outputs.token }}
+
+      - name: Sync nginxinc/kubernetes-json-schema
+        run: gh repo sync nginxinc/kubernetes-json-schema
+        env:
+          GH_TOKEN: ${{ steps.nginxinc-token.outputs.token }}
