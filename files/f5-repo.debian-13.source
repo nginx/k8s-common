@@ -1,5 +1,5 @@
 Types: deb
-URIs: http://azr.artifactory.f5net.com/debian-remote
+URIs: https://azr.artifactory.f5net.com/debian-remote
 Suites: trixie trixie-updates
 Components: main
 Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
