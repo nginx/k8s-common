@@ -5,7 +5,7 @@ Components: main
 Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
 
 Types: deb
-URIs: http://deb.debian.org/debian-security-remote
+URIs: http://deb.debian.org/debian-security
 Suites: trixie-security
 Components: main
 Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
